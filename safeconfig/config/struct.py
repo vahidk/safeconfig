@@ -87,6 +87,8 @@ class Struct(_Field):
     def get(self):
         """Get the value of the struct."""
         if not self._fields:
+            if not self._optional:
+                raise AttributeError("Required struct cannot be None.")
             return None
 
         outputs = {}

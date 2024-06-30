@@ -61,6 +61,21 @@ class TestStructMethods(unittest.TestCase):
         with self.assertRaises(AttributeError):
             self.struct.set({'field1': 10, 'field2': 'test'})  # Missing 'field3'
 
+    def test_optional_struct(self):
+        struct = NestedStruct(description="A nested struct", optional=True)
+        self.assertIsNone(struct.get(), "Default value for an optional variable should be None")
+        value = {'nested_field1': 50, 'nested_field2': 'nested'}
+        struct.set(value)
+        self.assertEqual(struct.get(), value, "Optional variable should accept new values")
+    
+    def test_required_struct(self):
+        required_struct = NestedStruct(description="A required nested struct")
+        with self.assertRaises(AttributeError):
+            required_struct.get()
+        value = {'nested_field1': 50, 'nested_field2': 'nested'}
+        required_struct.set(value)
+        self.assertEqual(required_struct.get(), value, "Required variable should accept new values")
+
     def test_set_flat(self):
         self.struct.set({
             'field1': 10,

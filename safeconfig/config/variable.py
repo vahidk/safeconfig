@@ -36,6 +36,9 @@ class Variable(_Field):
 
     def get(self):
         """Get the value of the variable."""
+        if self._value is None:
+            if not self._optional:
+                raise AttributeError("Required variable cannot be None.")
         return self._value
 
     def validate(self, value: any):

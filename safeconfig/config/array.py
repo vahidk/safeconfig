@@ -67,6 +67,8 @@ class Array(_Field):
     def get(self):
         """Get the value of the array."""
         if self._values is None:
+            if not self._optional:
+                raise AttributeError(f"Required array cannot be None.")
             return None
 
         outputs = []
