@@ -18,7 +18,7 @@ with open(os.path.join(this_directory, 'README.md')) as f:
 setup(
     name='safeconfig',
     version='1.0.0',
-    description='A simple configuration library for Python.',
+    description='Structured, flexible, and secure configuration management for Python with CLI support.',
     long_description=long_description,
     long_description_content_type='text/markdown',
     author='Vahid Kazemi',
