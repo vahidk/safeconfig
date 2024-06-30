@@ -217,7 +217,7 @@ class Struct(_Field):
         for name, field in self._fields.items():
             yield name, field.get()
 
-    def lookup_flat(self, flat_key, sep="."):
+    def get_flat(self, flat_key, sep="."):
         """
         Access an element with a flat key.
 
