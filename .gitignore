@@ -1,7 +1,6 @@
 .DS_Store
 .vscode
 __pycache__
-test_*
 update_package.sh
 dist
 *.egg-info

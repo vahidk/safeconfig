@@ -118,13 +118,13 @@ class Struct(_Field):
             return None
 
         for name in value.keys():
-            if name not in self._fields:
+            if name not in self._schema:
                 raise AttributeError(
-                    f"Field {name} doesn't exist in type {cls.__name__}."
+                    f"Field {name} doesn't exist in type {self.__class__.__name__}."
                 )
 
         outputs = {}
-        for name, field in self._fields.items():
+        for name, field in self._schema.items():
             try:
                 outputs[name] = field.validate(value.get(name, None))
             except AttributeError as e:
@@ -260,7 +260,7 @@ class Struct(_Field):
         except AttributeError as e:
             raise AttributeError(f"Error setting {flat_key}. {e}")
 
-    def read(path: str):
+    def read(self, path: str):
         """
         Create a Struct from a file.
 
@@ -272,9 +272,11 @@ class Struct(_Field):
         """
         ext = os.path.splitext(path)[1]
         if ext == ".json":
-            self.set(json.load(open(path)))
+            with open(path, "r") as file:
+                self.set(json.load(file))
         elif ext in [".yaml", ".yml"]:
-            self.set(yaml.full_load(open(path)))
+            with open(path, "r") as file:
+                self.set(yaml.full_load(file))
         else:
             raise RuntimeError(f"Invalid file extension {ext}.")
 
@@ -295,8 +297,10 @@ class Struct(_Field):
             print("Warning: Overriding config.")
         ext = os.path.splitext(path)[1]
         if ext == ".json":
-            open(path, "w").write(json.dumps(self.get(), indent=4))
+            with open(path, "w") as file:
+                file.write(json.dumps(self.get(), indent=4))
         elif ext in [".yaml", ".yml"]:
-            open(path, "w").write(yaml.dump(self.get()))
+            with open(path, "w") as file:
+                file.write(yaml.dump(self.get()))
         else:
             raise RuntimeError(f"Invalid file extension {ext}.")

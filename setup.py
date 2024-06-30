@@ -6,7 +6,7 @@ from setuptools import find_packages
 
 
 # List of runtime dependencies required by this built package
-install_requires = []
+install_requires = ['pyyaml']
 if sys.version_info <= (2, 7):
     install_requires += ['future', 'typing']
 
@@ -17,7 +17,7 @@ with open(os.path.join(this_directory, 'README.md')) as f:
 
 setup(
     name='safeconfig',
-    version='1.0.1',
+    version='1.0.2',
     description='Structured, flexible, and secure configuration management for Python with CLI support.',
     long_description=long_description,
     long_description_content_type='text/markdown',
@@ -26,5 +26,6 @@ setup(
     url='https://github.com/vahidk/safeconfig',
     packages=find_packages(),
     license='MIT',
-    install_requires=install_requires
+    install_requires=install_requires,
+    test_suite='tests',
 )
