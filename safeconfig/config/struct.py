@@ -133,26 +133,6 @@ class Struct(_Field):
                 )
         return outputs
 
-    def validate_field(self, name: str, value: any):
-        """
-        Validate a specific field in the struct.
-
-        Args:
-            name (str): The name of the field.
-            value (any): The value to be validated.
-
-        Returns:
-            any: The validated value.
-
-        Raises:
-            AttributeError: If the field does not exist.
-        """
-        if name not in self._fields:
-            raise AttributeError(
-                f"Field {name} doesn't exist in type {self.__class__.__name__}."
-            )
-        return self._fields[name].validate(value)
-
     def __getattr__(self, name: str) -> any:
         """Get a field value by attribute name."""
         if name not in self._fields:
