@@ -1,7 +1,7 @@
 import copy
 import json
 import os
-from typing import Optional
+from typing import Any, Optional
 
 import yaml
 
@@ -51,12 +51,12 @@ class Struct(_Field):
             optional=optional,
         )
 
-    def set(self, value: any):
+    def set(self, value: Any):
         """
         Set the value of the struct.
 
         Args:
-            value (any): The value to be set.
+            value (Any): The value to be set.
 
         Raises:
             AttributeError: If the value is invalid.
@@ -84,7 +84,7 @@ class Struct(_Field):
                     f"Error setting field {name} of {self.__class__.__name__}. {e}"
                 )
 
-    def get(self):
+    def get(self) -> Any:
         """Get the value of the struct."""
         if not self._fields:
             if not self._optional:
@@ -101,15 +101,15 @@ class Struct(_Field):
                 )
         return outputs
 
-    def validate(self, value: any):
+    def validate(self, value: Any) -> Any:
         """
         Validate the value of the struct.
 
         Args:
-            value (any): The value to be validated.
+            value (Any): The value to be validated.
 
         Returns:
-            any: The validated value.
+            Any: The validated value.
 
         Raises:
             AttributeError: If the value is invalid.
@@ -135,7 +135,7 @@ class Struct(_Field):
                 )
         return outputs
 
-    def __getattr__(self, name: str) -> any:
+    def __getattr__(self, name: str) -> Any:
         """Get a field value by attribute name."""
         if name not in self._fields:
             raise AttributeError(
@@ -143,7 +143,7 @@ class Struct(_Field):
             )
         return self._fields[name]
 
-    def __setattr__(self, name: str, value: any):
+    def __setattr__(self, name: str, value: Any):
         """Set a field value by attribute name."""
         if name.startswith("_"):
             object.__setattr__(self, name, value)
@@ -154,11 +154,11 @@ class Struct(_Field):
                 )
             return self._fields[name].set(value)
 
-    def __getitem__(self, name: str) -> any:
+    def __getitem__(self, name: str) -> Any:
         """Get a field value by key name."""
         return self._fields[name]
 
-    def __setitem__(self, name: str, value: any):
+    def __setitem__(self, name: str, value: Any):
         """Set a field value by key name."""
         self._fields[name].set(value)
 
@@ -170,36 +170,36 @@ class Struct(_Field):
             )
         self._fields[name].set(None)
 
-    def __contains__(self, key):
+    def __contains__(self, key) -> bool:
         """Check if a key exists in the struct."""
         return key in self._fields
 
-    def __len__(self):
+    def __len__(self) -> int:
         """Return the number of fields in the struct."""
         return len(self._fields)
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         """Return a string representation of the struct."""
         return yaml.dump(self.get())
 
-    def __str__(self):
+    def __str__(self) -> str:
         """Return a string representation of the struct."""
         return yaml.dump(self.get())
 
-    def __deepcopy__(self, memo):
+    def __deepcopy__(self, memo: Any) -> Any:
         """Return a deep copy of the struct."""
         return self.__class__(self._description, self._optional)
 
-    def keys(self):
+    def keys(self) -> Any:
         """Return the keys of the struct."""
         return self._fields.keys()
 
-    def items(self):
+    def items(self) -> Any:
         """Return the items of the struct."""
         for name, field in self._fields.items():
             yield name, field.get()
 
-    def get_flat(self, flat_key, sep="."):
+    def get_flat(self, flat_key: str, sep: str = ".") -> Any:
         """
         Access an element with a flat key.
 
@@ -208,7 +208,7 @@ class Struct(_Field):
             sep (str): The separator character.
 
         Returns:
-            any: The accessed element.
+            Any: The accessed element.
 
         Raises:
             AttributeError: If the element cannot be accessed.
@@ -221,13 +221,13 @@ class Struct(_Field):
             raise AttributeError(f"Error accessing {flat_key}. {e}")
         return p
 
-    def set_flat(self, flat_key, val, sep="."):
+    def set_flat(self, flat_key: str, val: Any, sep: str = "."):
         """
         Set an element with a flat key.
 
         Args:
             flat_key (str): The flat key string.
-            val (any): The value to set.
+            val (Any): The value to set.
             sep (str): The separator character.
 
         Raises:
@@ -242,7 +242,7 @@ class Struct(_Field):
         except AttributeError as e:
             raise AttributeError(f"Error setting {flat_key}. {e}")
 
-    def read(self, path: str):
+    def read(self, path: str) -> Any:
         """
         Create a Struct from a file.
 

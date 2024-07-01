@@ -13,6 +13,8 @@ class CLIParser:
         Args:
             config (Struct): The configuration struct to be updated with CLI arguments.
         """
+        if not isinstance(config, Struct):
+            raise ValueError("The configuration must be a Struct.")
         self.config = config
         self.parser = argparse.ArgumentParser(
             config.description, formatter_class=argparse.ArgumentDefaultsHelpFormatter
@@ -23,7 +25,7 @@ class CLIParser:
         )
         self._add_arguments("", self.config)
 
-    def _add_arguments(self, prefix, struct):
+    def _add_arguments(self, prefix: str, struct: Struct):
         """
         Recursively add arguments for the struct fields to the argument parser.
 
@@ -53,7 +55,7 @@ class CLIParser:
             else:
                 raise ValueError(f"Unsupported field type {type(field)}")
 
-    def parse_args(self):
+    def parse_args(self) -> Struct:
         """
         Parse the command-line arguments and update the configuration accordingly.
 

@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import Optional
+from typing import Any, Optional
 
 
 class _Field(ABC):
@@ -9,7 +9,7 @@ class _Field(ABC):
         self,
         data_type: type,
         description: Optional[str] = None,
-        default: Optional[any] = None,
+        default: Optional[Any] = None,
         optional: bool = False,
     ):
         """
@@ -18,7 +18,7 @@ class _Field(ABC):
         Args:
             data_type (type): The type of the field.
             description (Optional[str]): Description of the field.
-            default (Optional[any]): Default value of the field.
+            default (Optional[Any]): Default value of the field.
             optional (bool): Whether the field is optional.
         """
         self._data_type = data_type
@@ -29,12 +29,12 @@ class _Field(ABC):
             self._default = self.validate(default)
 
     @property
-    def data_type(self) -> str:
+    def data_type(self) -> type:
         """Return the data type of the field."""
         return self._data_type
 
     @property
-    def description(self) -> str:
+    def description(self) -> Optional[str]:
         """Return the description of the field."""
         return self._description
 
@@ -44,7 +44,7 @@ class _Field(ABC):
         return self._optional
 
     @property
-    def default(self) -> str:
+    def default(self) -> Optional[Any]:
         """Return the default value of the field."""
         return self._default
 
@@ -54,16 +54,16 @@ class _Field(ABC):
         return self._optional or self._default is not None
 
     @abstractmethod
-    def set(self, value: any):
+    def set(self, value: Any):
         """Set the value of the field."""
         pass
 
     @abstractmethod
-    def get(self) -> any:
+    def get(self) -> Any:
         """Get the value of the field."""
         pass
 
     @abstractmethod
-    def validate(self, value: any) -> any:
+    def validate(self, value: Any) -> Any:
         """Validate the value of the field."""
         pass
