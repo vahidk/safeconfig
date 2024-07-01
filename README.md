@@ -29,17 +29,17 @@ To define a configuration, create a class that inherits from `Struct` and define
 ```python
 from safeconfig import Variable, Array, Struct
 
-class SubConfig(Struct):
-    field1 = Variable(int, description="An integer field", default=10)
-    field2 = Variable(str, description="A string field", default="default")
+class DatasetConfig(Struct):
+    paths = Array(str, description="Dataset paths.")
+    batch_size = Variable(int, description="Batch size", default=64)
+    shuffle = Variable(bool, description="Shuffle dataset on the fly", default=True)
 
-class MyConfig(Struct):
-    int_var = Variable(int, description="An integer variable", default=1)
-    str_var = Variable(str, description="A string variable", default="hello")
-    arr_var = Array(int, description="An array of integers", default=[1, 2, 3])
-    struct_var = SubConfig(description="A nested struct")
+class TrainerConfig(Struct):
+    learning_rate = Variable(float, description="Learning rate for training", default=0.001)
+    epochs = Variable(int, description="Number of training epochs", optional=True)
+    training_dataset = DatasetConfig(description="Training datasets")
 
-config = MyConfig()
+config = TrainerConfig()
 ```
 
 ### Loading Configuration from a File
@@ -66,15 +66,15 @@ You can access and modify the configuration fields directly or using the `set` a
 
 ```python
 # Accessing fields
-print(config.int_var)
-print(config.struct_var.field1)
+print(config.learning_rate)
+print(config.training_dataset.batch_size)
 
 # Modifying fields
-config.int_var = 42
-config.struct_var.field1 = 20
+config.learning_rate = 0.01
+config.training_dataset.batch_size = 128
 
 # Using set and get methods
-config.set({'int_var': 42, 'struct_var': {'field1': 20}})
+config.set({'learning_rate': 0.01, 'training_dataset': {'paths': '/path/to/data'], 'batch_size': 128}})
 print(config.get())
 ```
 
@@ -86,7 +86,7 @@ The CLI parser allows you to override configuration values using command-line ar
 from safeconfig import CLIParser
 
 if __name__ == "__main__":
-    parser = CLIParser(MyConfig())
+    parser = CLIParser(TrainerConfig())
     config = parser.parse_args()
     print(config)
 ```
@@ -95,8 +95,9 @@ Now you can load configuration files by passing a config file path or override f
 
 ```bash
 python your_script.py --config path/to/config.yaml \
---int_var 42 \
---struct_var.field1 20 \
+--learning_rate 0.01 \
+--training_dataset.paths /data/dataset1 /data/dataset2
+--training_dataset.batch_size 128 \
 --print_config
 ```
 
@@ -111,15 +112,14 @@ python your_script.py --help
 Here is an example configuration file in YAML format:
 
 ```yaml
-int_var: 5
-str_var: "example"
-arr_var:
-  - 1
-  - 2
-  - 3
-struct_var:
-  field1: 100
-  field2: "nested value"
+learning_rate: 0.01
+epochs: 10
+training_dataset:
+  paths:
+    - "/data/dataset1"
+    - "/data/dataset2"
+  batch_size: 128
+  shuffle: true
 ```
 
 ## Contributing
