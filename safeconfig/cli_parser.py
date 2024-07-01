@@ -3,6 +3,16 @@ import os
 from .config import Variable, Array, Struct
 
 
+class StoreWithFlag(argparse.Action):
+    def __init__(self, *args, **kwargs):
+        self.seen = False
+        super().__init__(*args, **kwargs)
+
+    def __call__(self, parser, namespace, values, option_string=None):
+        setattr(namespace, self.dest, values)
+        setattr(namespace, f"_set_{self.dest}", True)
+
+
 class CLIParser:
     """Class to parse command-line arguments and update the configuration accordingly."""
 
@@ -44,6 +54,7 @@ class CLIParser:
                     default=field.default,
                     type=field.data_type,
                     nargs="*",
+                    action=StoreWithFlag,
                 )
             elif isinstance(field, Variable):
                 self.parser.add_argument(
@@ -51,6 +62,7 @@ class CLIParser:
                     help=field.description,
                     default=field.default,
                     type=field.data_type,
+                    action=StoreWithFlag,
                 )
             else:
                 raise ValueError(f"Unsupported field type {type(field)}")
@@ -75,7 +87,8 @@ class CLIParser:
 
         # Override the configuration with command line arguments
         for k, v in kwargs.items():
-            self.config.set_flat(k, v)
+            if getattr(namespace, f"_set_{k}", False):
+                self.config.set_flat(k, v)
 
         # Print the configuration
         if print_config:

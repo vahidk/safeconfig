@@ -77,7 +77,11 @@ class TestCLIParser(unittest.TestCase):
     @patch("argparse.ArgumentParser.parse_args")
     def test_override_config(self, mock_parse_args):
         mock_parse_args.return_value = argparse.Namespace(
-            config=self.test_json_config.name, field1=30, field2="override"
+            config=self.test_json_config.name,
+            field1=30,
+            field2="override",
+            _set_field1=True,
+            _set_field2=True,
         )
 
         cli_parser = CLIParser(TestConfigStruct())
@@ -85,7 +89,7 @@ class TestCLIParser(unittest.TestCase):
 
         self.assertEqual(config.field1.get(), 30)
         self.assertEqual(config.field2.get(), "override")
-    
+
     @patch("argparse.ArgumentParser.parse_args")
     def test_load_nested_config(self, mock_parse_args):
         mock_parse_args.return_value = argparse.Namespace(
