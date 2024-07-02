@@ -20,7 +20,7 @@ SafeConfig provides a structured and flexible way to define, validate, and manag
 
 ## Installation
 
-To install the library, clone the repository and install the required dependencies:
+To install the library, simply run:
 
 ```bash
 pip install safeconfig

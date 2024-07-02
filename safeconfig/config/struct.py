@@ -33,12 +33,18 @@ class Struct(_Field):
             delattr(cls, name)
         cls._schema = schema
 
-    def __init__(self, description: Optional[str] = None, optional: bool = False):
+    def __init__(
+        self,
+        description: Optional[str] = None,
+        default: Optional[Any] = None,
+        optional: bool = False,
+    ):
         """
         Initialize a structured field.
 
         Args:
             description (Optional[str]): Description of the struct.
+            default (Optional[Any]): Default value of the variable.
             optional (bool): Whether the struct is optional.
         """
         if self.__class__ == Struct:
@@ -48,6 +54,7 @@ class Struct(_Field):
         super().__init__(
             data_type=self.__class__,
             description=description,
+            default=default,
             optional=optional,
         )
 
@@ -62,10 +69,12 @@ class Struct(_Field):
             AttributeError: If the value is invalid.
         """
         if value is None:
-            if not self._optional:
-                raise AttributeError("Required struct cannot be None.")
-            self._fields = {}
-            return
+            if self._default is None:
+                if not self._optional:
+                    raise AttributeError("Required struct cannot be None.")
+                self._fields = {}
+                return
+            value = self._default
 
         if not self._fields:
             self._fields = copy.deepcopy(self._schema)
@@ -115,9 +124,11 @@ class Struct(_Field):
             AttributeError: If the value is invalid.
         """
         if value is None:
-            if not self._optional:
-                raise AttributeError(f"Required struct cannot be None.")
-            return None
+            if self._default is None:
+                if not self._optional:
+                    raise AttributeError(f"Required struct cannot be None.")
+                return None
+            return self._default
 
         for name in value.keys():
             if name not in self._schema:
@@ -188,7 +199,11 @@ class Struct(_Field):
 
     def __deepcopy__(self, memo: Any) -> Any:
         """Return a deep copy of the struct."""
-        return self.__class__(self._description, self._optional)
+        return self.__class__(
+            description=self._description, 
+            default=self._default,
+            optional=self._optional,
+        )
 
     def keys(self) -> Any:
         """Return the keys of the struct."""

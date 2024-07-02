@@ -60,7 +60,8 @@ class Variable(_Field):
                 if not self._optional:
                     raise AttributeError(f"Required variable cannot be None.")
                 return None
-            value = self._default
+            return self._default
+
         if not isinstance(value, self._data_type):
             raise ValueError(
                 f"Invalid data type, expected {self._data_type.__name__}, got {type(value).__name__}"

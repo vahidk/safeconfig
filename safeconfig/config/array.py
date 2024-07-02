@@ -101,7 +101,7 @@ class Array(_Field):
                 if not self._optional:
                     raise AttributeError("Required array cannot be None.")
                 return None
-            value = self._default
+            return self._default
 
         outputs: list[_Field] = []
         for i, v in enumerate(value):
