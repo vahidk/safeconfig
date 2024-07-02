@@ -1,4 +1,10 @@
-# SafeConfig Library
+<h1 align="center">
+<img src="https://raw.githubusercontent.com/vahidk/safeconfig/main/media/safeconfig.png" alt="SafeConfig Library" width="256">
+</h1><br>
+
+
+[![PyPI - Downloads](https://img.shields.io/pypi/dm/safeconfig)](https://pypi.org/project/safeconfig/)
+
 
 ## Overview
 
