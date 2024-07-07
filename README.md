@@ -28,59 +28,63 @@ pip install safeconfig
 
 ## Usage
 
-### Defining a Configuration
+### Defining a Configuration Schema
 
-To define a configuration, create a class that inherits from `Struct` and define the fields using `Variable`, `Array`, and other `Struct` subclasses.
+To define a schema, create a class that inherits from `Struct` and define the fields using `Variable`, `Array`, and other `Struct` subclasses.
 
 ```python
 from safeconfig import Variable, Array, Struct
 
-class DatasetConfig(Struct):
-    paths = Array(str, description="Dataset paths.")
-    batch_size = Variable(int, description="Batch size", default=64)
-    shuffle = Variable(bool, description="Shuffle dataset on the fly", default=True)
-
 class TrainerConfig(Struct):
     learning_rate = Variable(float, description="Learning rate for training", default=0.001)
     epochs = Variable(int, description="Number of training epochs", optional=True)
-    training_dataset = DatasetConfig(description="Training datasets")
-
-config = TrainerConfig()
+    data = Array(str, description="Dataset paths.")
 ```
 
-### Loading Configuration from a File
+### Create a Configuration File
+
+Here is an example configuration file in YAML format:
+
+```yaml
+learning_rate: 0.01
+epochs: 10
+data:
+  - "/data/dataset1"
+  - "/data/dataset2"
+```
+
+### Loading and Saving Configuration Files
 
 You can load the configuration from a JSON or YAML file using the `read` method.
 
 ```python
+config = TrainerConfig()
 config.read("path/to/config.yaml")
 ```
 
 Note that the Struct will be used as a schema to validate all the attributes.
 
-### Saving Configuration to a File
-
-You can save the configuration to a JSON or YAML file using the `write` method.
+Similarly, you can save the configuration to a JSON or YAML file using the `write` method.
 
 ```python
 config.write("path/to/config.yaml")
 ```
 
-### Accessing and Modifying Configuration
+### Accessing and Modifying the Configuration
 
 You can access and modify the configuration fields directly or using the `set` and `get` methods.
 
 ```python
 # Accessing fields
 print(config.learning_rate)
-print(config.training_dataset.batch_size)
+print(config.data)
 
 # Modifying fields
 config.learning_rate = 0.01
-config.training_dataset.batch_size = 128
+config.data[0] = '/path/to/data'
 
 # Using set and get methods
-config.set({'learning_rate': 0.01, 'training_dataset': {'paths': '/path/to/data'], 'batch_size': 128}})
+config.set({'learning_rate': 0.01, 'data': ['/path/to/data']})
 print(config.get())
 ```
 
@@ -102,8 +106,7 @@ Now you can load configuration files by passing a config file path or override f
 ```bash
 python your_script.py --config path/to/config.yaml \
 --learning_rate 0.01 \
---training_dataset.paths /data/dataset1 /data/dataset2
---training_dataset.batch_size 128 \
+--data /data/dataset1 /data/dataset2
 --print_config
 ```
 
@@ -111,21 +114,6 @@ Help command will is automatically generated based on the schema:
 
 ```bash
 python your_script.py --help
-```
-
-### Example Configuration
-
-Here is an example configuration file in YAML format:
-
-```yaml
-learning_rate: 0.01
-epochs: 10
-training_dataset:
-  paths:
-    - "/data/dataset1"
-    - "/data/dataset2"
-  batch_size: 128
-  shuffle: true
 ```
 
 ## Contributing
