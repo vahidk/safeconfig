@@ -67,7 +67,7 @@ class TestStructMethods(unittest.TestCase):
         value = {'nested_field1': 50, 'nested_field2': 'nested'}
         struct.set(value)
         self.assertEqual(struct.get(), value, "Optional variable should accept new values")
-    
+
     def test_required_struct(self):
         required_struct = NestedStruct(description="A required nested struct")
         with self.assertRaises(AttributeError):

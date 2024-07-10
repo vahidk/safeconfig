@@ -126,7 +126,7 @@ class Struct(_Field):
         if value is None:
             if self._default is None:
                 if not self._optional:
-                    raise AttributeError(f"Required struct cannot be None.")
+                    raise AttributeError("Required struct cannot be None.")
                 return None
             return self._default
 
@@ -175,11 +175,12 @@ class Struct(_Field):
 
     def __delete__(self, name: str):
         """Delete a field by key name."""
-        if self._fields[name].deletable:
+        field = self._fields[name]
+        if field._optional or field._default is not None:
             raise AttributeError(
                 f"Can't delete required field {name} in type {self.__class__.__name__}."
             )
-        self._fields[name].set(None)
+        field.set(None)
 
     def __contains__(self, key) -> bool:
         """Check if a key exists in the struct."""
@@ -200,7 +201,7 @@ class Struct(_Field):
     def __deepcopy__(self, memo: Any) -> Any:
         """Return a deep copy of the struct."""
         return self.__class__(
-            description=self._description, 
+            description=self._description,
             default=self._default,
             optional=self._optional,
         )

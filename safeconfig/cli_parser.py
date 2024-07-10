@@ -1,5 +1,5 @@
 import argparse
-import os
+
 from .config import Variable, Array, Struct
 
 

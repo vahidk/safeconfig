@@ -4,20 +4,20 @@ from safeconfig import Variable
 
 
 class TestVariableMethods(unittest.TestCase):
-    def setUp(self):
-        self.variable = Variable(int, description="Test variable", default=5)
-
     def test_default_value(self):
-        self.assertEqual(self.variable.default, 5)
+        variable = Variable(int, description="Test variable", default=5)
+        self.assertEqual(variable.default, 5)
 
     def test_set_get_value(self):
-        self.variable.set(15)
-        self.assertEqual(self.variable.get(), 15)
+        variable = Variable(float, description="Test variable")
+        variable.set(15.0)
+        self.assertEqual(variable.get(), 15.0)
 
     def test_invalid_type(self):
+        variable = Variable(int, description="Test variable", default=5)
         with self.assertRaises(ValueError):
-            self.variable.set("invalid")
-    
+            variable.set("invalid")
+
     def test_optional_variable(self):
         optional_variable = Variable(int, description="Optional variable", optional=True)
         self.assertIsNone(optional_variable.get(), "Default value for an optional variable should be None")

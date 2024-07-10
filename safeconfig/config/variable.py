@@ -58,7 +58,7 @@ class Variable(_Field):
         if value is None:
             if self._default is None:
                 if not self._optional:
-                    raise AttributeError(f"Required variable cannot be None.")
+                    raise AttributeError("Required variable cannot be None.")
                 return None
             return self._default
 

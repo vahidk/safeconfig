@@ -48,11 +48,6 @@ class _Field(ABC):
         """Return the default value of the field."""
         return self._default
 
-    @property
-    def deletable(self) -> bool:
-        """Return whether the field is deletable."""
-        return self._optional or self._default is not None
-
     @abstractmethod
     def set(self, value: Any):
         """Set the value of the field."""

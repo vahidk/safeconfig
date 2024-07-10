@@ -1,3 +1,3 @@
-from .array import Array
-from .struct import Struct
-from .variable import Variable
+from .array import Array  # noqa
+from .struct import Struct  # noqa
+from .variable import Variable  # noqa
