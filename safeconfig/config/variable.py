@@ -22,7 +22,7 @@ class Variable(_Field):
             default (Optional[Any]): Default value of the variable.
             optional (bool): Whether the variable is optional.
         """
-        self._value = None
+        self._value: Any = None
         super().__init__(
             data_type=data_type,
             description=description,

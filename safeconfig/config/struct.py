@@ -49,8 +49,7 @@ class Struct(_Field):
         """
         if self.__class__ == Struct:
             raise TypeError("Struct class cannot be instantiated directly.")
-
-        self._fields = {} if optional else copy.deepcopy(self._schema)
+        self._fields: dict = {}
         super().__init__(
             data_type=self.__class__,
             description=description,

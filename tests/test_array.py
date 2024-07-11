@@ -10,6 +10,9 @@ class TestArrayMethods(unittest.TestCase):
     def test_default_value(self):
         self.assertEqual(self.array.default, [1, 2, 3])
 
+    def test_get_value(self):
+        self.assertEqual(self.array.get(), [1, 2, 3])
+
     def test_set_get_value(self):
         self.array.set([4, 5, 6])
         self.assertEqual(self.array.get(), [4, 5, 6])

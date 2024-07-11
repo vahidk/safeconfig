@@ -8,6 +8,10 @@ class TestVariableMethods(unittest.TestCase):
         variable = Variable(int, description="Test variable", default=5)
         self.assertEqual(variable.default, 5)
 
+    def test_get_value(self):
+        variable = Variable(int, description="Test variable", default=5)
+        self.assertEqual(variable.get(), 5)
+
     def test_set_get_value(self):
         variable = Variable(float, description="Test variable")
         variable.set(15.0)

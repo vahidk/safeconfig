@@ -27,6 +27,7 @@ class _Field(ABC):
         self._optional = optional
         if default is not None:
             self._default = self.validate(default)
+            self.set(default)
 
     @property
     def data_type(self) -> type:

@@ -17,6 +17,16 @@ class TestStruct(Struct):
 class TestStructMethods(unittest.TestCase):
     def setUp(self):
         self.struct = TestStruct(description="Test struct")
+        self.nested = NestedStruct(default={
+            'nested_field1': 20,
+            'nested_field2': 'nested'
+        })
+
+    def test_default_value(self):
+        self.assertEqual(self.nested.default, {'nested_field1': 20, 'nested_field2': 'nested'})
+    
+    def test_get_value(self):
+        self.assertEqual(self.nested.get(), {'nested_field1': 20, 'nested_field2': 'nested'})
 
     def test_set_get_simple_fields(self):
         self.struct.set({'field1': 10, 'field2': 'test', 'field3': [1, 2, 3]})
